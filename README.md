@@ -18,6 +18,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	gplayVerifier "github.com/sensimevanidus/google-play-iap-verifier/verifier"
 )
@@ -25,6 +26,7 @@ import (
 func main() {
 	if err := gplayVerifier.VerifyPurchase("<credentialsFilePath>", "<bundleID>", "<productID>", "<purchaseToken>"); err != nil {
 		fmt.Printf("Purchase is not valid. Error details: %v\n", err.Error())
+		os.Exit(1)
 	}
 
 	fmt.Println("Purchase is valid.")
