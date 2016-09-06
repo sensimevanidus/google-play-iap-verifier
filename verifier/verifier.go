@@ -10,31 +10,31 @@ import (
 // Developer API's Purchases.products:get endpoint in order to verify the purchase. Please refer
 // to https://developers.google.com/android-publisher/api-ref/purchases/products/get for more
 // information.
-func VerifyPurchase(credentialsFilePath, bundleID, productID, purchaseToken string) (bool, error) {
+func VerifyPurchase(credentialsFilePath, bundleID, productID, purchaseToken string) error {
 	configFileContent, err := getFileContent(credentialsFilePath)
 	if err != nil {
-		return false, err
+		return err
 	}
 
 	config, err := google.JWTConfigFromJSON(configFileContent, googleAndroidPublisherService.AndroidpublisherScope)
 	if err != nil {
-		return false, err
+		return err
 	}
 
 	service, err := googleAndroidPublisherService.New(config.Client(context.Background()))
 	if err != nil {
-		return false, err
+		return err
 	}
 
 	rawResponse, err := service.Purchases.Products.Get(bundleID, productID, purchaseToken).Do()
 	if err != nil {
-		return false, err
+		return err
 	}
 
 	_, err = rawResponse.MarshalJSON()
 	if err != nil {
-		return false, err
+		return err
 	}
 
-	return true, nil
+	return nil
 }

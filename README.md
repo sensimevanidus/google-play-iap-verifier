@@ -1,21 +1,32 @@
 # google-play-iap-verification
 Server-side IAP verification for Google Play.
 
+## Why this repo?
+
+Recently, I had to implement an IAP (In-app Purchase) verification solution written in **go** for Google Play store. I searched for ready-to-use libraries; but couldn't find any. There were some, but they were implemented in other programming languages. That's why I created this repo.
+
+This is a simple **go** package and does not provide any HTTP API. You'll need to wrap this with an HTTP API on your own.
+
 ## Requirements
 
 * You must download the JSON-formatted credentials file from the Google Developer Console for the application you'll be using.
 
-## Request Fields
+## Usage examples
 
-| Name | Key | Description |
-| ---- | --- | ----------- |
-| Bundle ID | bundleID | Bundle ID of the application |
-| Product ID | productID | ID of the purchased product |
-| Purchase Token | purchaseToken | Token provided by the Play Store API upon purchase completion on the client-side |
+```go
+package main
 
-## Response Fields
+import (
+	"fmt"
 
-| Name | Key | Values | Description |
-| ---- | --- | ------ | ----------- |
-| Is successful? | isSuccessful | true or false | Flag indicating whether the Play Store API verifies the purchase or not |
-| Error details | errorDetails | (optional) string | Message that gives further information about the error |
+	gplayVerifier "github.com/sensimevanidus/google-play-iap-verifier/verifier"
+)
+
+func main() {
+	if err := gplayVerifier.VerifyPurchase("<credentialsFilePath>", "<bundleID>", "<productID>", "<purchaseToken>"); err != nil {
+		fmt.Printf("Purchase is not valid. Error details: %v\n", err.Error())
+	}
+
+	fmt.Println("Purchase is valid.")
+}
+```
